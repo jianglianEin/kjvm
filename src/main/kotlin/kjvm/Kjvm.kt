@@ -1,7 +1,6 @@
 package kjvm
 
 import java.nio.file.Paths
-import java.util.*
 
 class Kjvm {
     companion object {

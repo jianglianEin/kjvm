@@ -1,13 +1,32 @@
 package kjvm.opcode
 
+
 import kjvm.lang.*
 import kjvm.runtime.Env
+import org.apache.bcel.classfile.ClassParser
+import org.apache.bcel.classfile.JavaClass
+import org.apache.bcel.classfile.Method
 import java.nio.file.Path
+import java.util.AbstractMap
 
-class KjvmOpcodeClass: KjvmClass {
+class KjvmOpcodeClass(private val classLoader: KjvmClassLoader?, private val classParser: JavaClass) : KjvmClass {
+    private val className = classParser.className
+    private val methodsMap = hashMapOf<Map.Entry<String, String>, KjvmOpcodeMethod>()
+    private val fieldsMap = hashMapOf<String, KjvmField>()
+
+    init {
+        for (method: Method in classParser.methods){
+            val name = method.name
+            val signature = method.signature
+            methodsMap[AbstractMap.SimpleEntry(name, signature)] = KjvmOpcodeMethod(this, method)
+        }
+    }
+
+
     companion object {
         fun read(classLoader: KjvmClassLoader?, path: Path?): KjvmOpcodeClass? {
-            return null
+            val classParser = ClassParser(path.toString()).parse()
+            return KjvmOpcodeClass(classLoader, classParser)
         }
     }
 
