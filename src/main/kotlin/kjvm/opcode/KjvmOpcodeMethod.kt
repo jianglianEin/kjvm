@@ -2,6 +2,7 @@ package kjvm.opcode
 
 import kjvm.lang.KjvmMethod
 import kjvm.runtime.Env
+import kjvm.tools.ClassFileHelper
 import org.apache.bcel.classfile.Code
 import org.apache.bcel.classfile.Method
 
@@ -9,6 +10,8 @@ import org.apache.bcel.classfile.Method
 class KjvmOpcodeMethod(private val opcodeClass: KjvmOpcodeClass, private val method: Method) : KjvmMethod {
     init {
         val codeAttribute = method.attributes[0]
+        val name = method.name
+        val argsNum = ClassFileHelper.parseMethodSignature(method.signature)
         val opcodes = BytecodeInterpreter.parseCodes((method.attributes[0] as Code).code)
     }
 
