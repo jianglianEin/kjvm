@@ -61,7 +61,36 @@ enum class OpcodeRout(code: Short) {
             return Constants.INVOKESPECIAL
         }
 
+    },
+    GETSTATIC(Constants.GETSTATIC) {
+        override fun invoke(env: Env?, frame: StackFrame?, operands: ByteArray?) {
+            TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        }
+
+        override fun getCode(): Short {
+            return Constants.GETSTATIC
+        }
+
+    },
+    LDC(Constants.LDC) {
+        override fun invoke(env: Env?, frame: StackFrame?, operands: ByteArray?) {
+            TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        }
+
+        override fun getCode(): Short {
+            return Constants.LDC
+        }
+    },
+    INVOKEVIRTUAL(Constants.INVOKEVIRTUAL) {
+        override fun invoke(env: Env?, frame: StackFrame?, operands: ByteArray?) {
+            TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        }
+
+        override fun getCode(): Short {
+            return Constants.INVOKEVIRTUAL
+        }
     };
+
 
     companion object {
         private val codeMapping = hashMapOf<Short, OpcodeRout>()
@@ -81,5 +110,6 @@ enum class OpcodeRout(code: Short) {
 
     @Throws(Exception::class)
     abstract fun invoke(env: Env?, frame: StackFrame?, operands: ByteArray?)
+
     abstract fun getCode(): Short
 }

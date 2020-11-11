@@ -7,7 +7,7 @@ import org.apache.bcel.classfile.ClassParser
 import org.apache.bcel.classfile.JavaClass
 import org.apache.bcel.classfile.Method
 import java.nio.file.Path
-import java.util.AbstractMap
+import java.util.*
 
 class KjvmOpcodeClass(private val classLoader: KjvmClassLoader?, private val classParser: JavaClass) : KjvmClass {
     private val className = classParser.className
@@ -15,7 +15,7 @@ class KjvmOpcodeClass(private val classLoader: KjvmClassLoader?, private val cla
     private val fieldsMap = hashMapOf<String, KjvmField>()
 
     init {
-        for (method: Method in classParser.methods){
+        for (method: Method in classParser.methods) {
             val name = method.name
             val signature = method.signature
             methodsMap[AbstractMap.SimpleEntry(name, signature)] = KjvmOpcodeMethod(this, method)
@@ -35,7 +35,8 @@ class KjvmOpcodeClass(private val classLoader: KjvmClassLoader?, private val cla
     }
 
     override fun getMethod(name: String, description: String): KjvmMethod {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        return methodsMap[AbstractMap.SimpleEntry(name, description)]
+            ?: throw NoSuchMethodException("opcode method: $name, description: $description")
     }
 
     override fun hasMethod(name: String, description: String): Boolean {
@@ -56,5 +57,9 @@ class KjvmOpcodeClass(private val classLoader: KjvmClassLoader?, private val cla
 
     override fun getName(): String {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
+
+    fun getClassParser(): JavaClass {
+        return classParser
     }
 }
