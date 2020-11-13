@@ -14,6 +14,8 @@ class KjvmOpcodeClass(private val classLoader: KjvmClassLoader?, private val cla
     private val methodsMap = hashMapOf<Map.Entry<String, String>, KjvmOpcodeMethod>()
     private val fieldsMap = hashMapOf<String, KjvmField>()
 
+    private var isInited = false
+
     init {
         for (method: Method in classParser.methods) {
             val name = method.name
@@ -61,5 +63,19 @@ class KjvmOpcodeClass(private val classLoader: KjvmClassLoader?, private val cla
 
     fun getClassParser(): JavaClass {
         return classParser
+    }
+
+    fun clinit(env: Env) {
+        if (isInited) {
+            return
+        }
+        synchronized(this) {
+            if (isInited) {
+                return
+            }
+            isInited = true
+
+            methodsMap[AbstractMap.SimpleEntry("<clinit>", "()V")]?.call(env, null)
+        }
     }
 }

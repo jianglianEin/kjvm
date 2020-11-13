@@ -6,6 +6,45 @@ import java.util.*
 
 class BytecodeInterpreter {
     companion object{
+        fun run(env: Env) {
+            if (env.getStack().isRunning()) {
+                return
+            }
+
+            val jvmStack = env.getStack()
+            jvmStack.setRunning(true)
+            var frame = jvmStack.currentFrame()
+
+            while (frame != null){
+                if (frame.isReturned()) {
+                    val oldFrame = frame
+                    jvmStack.popFrame()
+                    frame = jvmStack.currentFrame()
+                    if (frame != null && "void" != frame.getReturnType()){
+                        frame.getOperandStack().push(oldFrame.getReturn())
+                    }
+                    continue
+                }
+
+                val opcodes = frame.getOpcodes()
+                var pc = frame.increasePC()
+
+                val sb = StringBuilder()
+                sb.append("> ")
+                sb.append(frame.getKjvmClass().getName())
+                sb.append(".")
+                sb.append(frame.getKjvmMethod().getName())
+                sb.append("@")
+                sb.append(pc)
+                sb.append(":")
+                sb.append(opcodes[pc])
+                println(sb)
+
+                opcodes[pc].invoke(env, frame)
+            }
+            
+        }
+
         fun parseCodes(codes: ByteArray): ArrayList<OpcodeInvoker>{
             val opcodes = arrayListOf<OpcodeInvoker>()
             var i = 0

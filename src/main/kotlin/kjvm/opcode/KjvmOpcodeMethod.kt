@@ -3,6 +3,7 @@ package kjvm.opcode
 import kjvm.lang.KjvmMethod
 import kjvm.runtime.Env
 import kjvm.tools.ClassFileHelper
+import org.apache.bcel.Constants
 import org.apache.bcel.classfile.Code
 import org.apache.bcel.classfile.Method
 
@@ -24,6 +25,22 @@ class KjvmOpcodeMethod(private val opcodeClass: KjvmOpcodeClass, private val met
             (codeAttribute as Code).maxLocals,
             (codeAttribute as Code).maxStack
         )
+
+        val localVariables = frame.getLocalVariables()
+        var pos = 0
+
+        if (method.accessFlags != Constants.ACC_STATIC.toInt()){
+            localVariables.set(0, thiz, 1)
+            pos++
+        }
+
+        for (arg in args){
+            localVariables.set(pos++, arg, 1)
+        }
+
+        opcodeClass.clinit(env)
+        BytecodeInterpreter.run(env)
+
     }
 
     override fun getParameterCount(): Int {

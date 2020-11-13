@@ -5,7 +5,7 @@ import java.util.*
 class Slots<T>(size: Int) {
     private val buffer = arrayOfNulls<Any?>(size) as kotlin.Array<T?>
 
-    fun set(pos: Int, entity: T, size: Int){
+    fun set(pos: Int, entity: T?, size: Int){
         require(!(pos < 0 || pos + size > buffer.size)) { "invalid entity size $size" }
         buffer[pos] = entity
         for (i in 1 until size) {

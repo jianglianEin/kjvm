@@ -5,11 +5,11 @@ class SlotsStack<T>(size: Int) {
 
     private var end = 0
 
-    fun push(entity: T) {
+    fun push(entity: T?) {
         push(entity, 1)
     }
 
-    fun push(entity: T, size: Int) {
+    fun push(entity: T?, size: Int) {
         if (size <= 0 || end + size > buffer.size) {
             throw IllegalArgumentException("invalid entity size: $size")
         }
