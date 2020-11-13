@@ -29,12 +29,12 @@ class KjvmOpcodeMethod(private val opcodeClass: KjvmOpcodeClass, private val met
         val localVariables = frame.getLocalVariables()
         var pos = 0
 
-        if (method.accessFlags != Constants.ACC_STATIC.toInt()){
+        if (method.accessFlags and Constants.ACC_STATIC.toInt() == 0) {
             localVariables.set(0, thiz, 1)
             pos++
         }
 
-        for (arg in args){
+        for (arg in args) {
             localVariables.set(pos++, arg, 1)
         }
 
@@ -48,6 +48,6 @@ class KjvmOpcodeMethod(private val opcodeClass: KjvmOpcodeClass, private val met
     }
 
     override fun getName(): String {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        return name
     }
 }

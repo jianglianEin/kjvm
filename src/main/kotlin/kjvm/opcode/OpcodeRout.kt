@@ -3,11 +3,16 @@ package kjvm.opcode
 import kjvm.runtime.Env
 import kjvm.runtime.StackFrame
 import org.apache.bcel.Constants
+import org.apache.bcel.classfile.ConstantClass
+import org.apache.bcel.classfile.ConstantFieldref
+import org.apache.bcel.classfile.ConstantNameAndType
+import org.apache.bcel.classfile.ConstantUtf8
 
 enum class OpcodeRout(code: Short) {
     ALOAD_0(Constants.ALOAD_0) {
-        override fun invoke(env: Env?, frame: StackFrame?, operands: ByteArray?) {
-            TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        override fun invoke(env: Env, frame: StackFrame, operands: ByteArray) {
+            val value = frame.getLocalVariables()[0]
+            frame.getOperandStack().push(value, 1)
         }
 
         override fun getCode(): Short {
@@ -16,7 +21,7 @@ enum class OpcodeRout(code: Short) {
 
     },
     ALOAD_1(Constants.ALOAD_1) {
-        override fun invoke(env: Env?, frame: StackFrame?, operands: ByteArray?) {
+        override fun invoke(env: Env, frame: StackFrame, operands: ByteArray) {
             TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
         }
 
@@ -25,7 +30,7 @@ enum class OpcodeRout(code: Short) {
         }
     },
     ALOAD_2(Constants.ALOAD_2) {
-        override fun invoke(env: Env?, frame: StackFrame?, operands: ByteArray?) {
+        override fun invoke(env: Env, frame: StackFrame, operands: ByteArray) {
             TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
         }
 
@@ -34,7 +39,7 @@ enum class OpcodeRout(code: Short) {
         }
     },
     ALOAD_3(Constants.ALOAD_3) {
-        override fun invoke(env: Env?, frame: StackFrame?, operands: ByteArray?) {
+        override fun invoke(env: Env, frame: StackFrame, operands: ByteArray) {
             TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
         }
 
@@ -43,7 +48,7 @@ enum class OpcodeRout(code: Short) {
         }
     },
     RETURN(Constants.RETURN) {
-        override fun invoke(env: Env?, frame: StackFrame?, operands: ByteArray?) {
+        override fun invoke(env: Env, frame: StackFrame, operands: ByteArray) {
             TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
         }
 
@@ -53,8 +58,10 @@ enum class OpcodeRout(code: Short) {
 
     },
     INVOKESPECIAL(Constants.INVOKESPECIAL) {
-        override fun invoke(env: Env?, frame: StackFrame?, operands: ByteArray?) {
-            TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        override fun invoke(env: Env, frame: StackFrame, operands: ByteArray) {
+            val arg = operands[0].toInt() shl 8 or operands[1].toInt()
+
+            frame.getConstantPool()?.constantPool?.get(arg)
         }
 
         override fun getCode(): Short {
@@ -63,8 +70,21 @@ enum class OpcodeRout(code: Short) {
 
     },
     GETSTATIC(Constants.GETSTATIC) {
-        override fun invoke(env: Env?, frame: StackFrame?, operands: ByteArray?) {
-            TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        override fun invoke(env: Env, frame: StackFrame, operands: ByteArray) {
+            val index = (operands[0].toInt() shl 8) or operands[1].toInt()
+            val constantPool = frame.getConstantPool()!!
+            val cpClassIndex = constantPool.getConstant((constantPool.constantPool[index] as ConstantFieldref).classIndex)
+            val cpNameAndTypeIndex = constantPool.getConstant((constantPool.constantPool[index] as ConstantFieldref).nameAndTypeIndex)
+
+            val classPackage =(constantPool.getConstant((cpClassIndex as ConstantClass).nameIndex) as ConstantUtf8).bytes
+            val methodName =(constantPool.getConstant((cpNameAndTypeIndex as ConstantNameAndType).nameIndex) as ConstantUtf8).bytes
+
+            val kjvmClass = env.getVirtualMachine().getClassFile(classPackage)
+            val kjvmFiled = kjvmClass.getField(methodName)
+
+            val value = kjvmFiled.get(env, null)
+            frame.getOperandStack().push(value, 1)
+
         }
 
         override fun getCode(): Short {
@@ -73,7 +93,7 @@ enum class OpcodeRout(code: Short) {
 
     },
     LDC(Constants.LDC) {
-        override fun invoke(env: Env?, frame: StackFrame?, operands: ByteArray?) {
+        override fun invoke(env: Env, frame: StackFrame, operands: ByteArray) {
             TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
         }
 
@@ -82,7 +102,7 @@ enum class OpcodeRout(code: Short) {
         }
     },
     INVOKEVIRTUAL(Constants.INVOKEVIRTUAL) {
-        override fun invoke(env: Env?, frame: StackFrame?, operands: ByteArray?) {
+        override fun invoke(env: Env, frame: StackFrame, operands: ByteArray) {
             TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
         }
 
@@ -109,7 +129,7 @@ enum class OpcodeRout(code: Short) {
     }
 
     @Throws(Exception::class)
-    abstract fun invoke(env: Env?, frame: StackFrame?, operands: ByteArray?)
+    abstract fun invoke(env: Env, frame: StackFrame, operands: ByteArray)
 
     abstract fun getCode(): Short
 }

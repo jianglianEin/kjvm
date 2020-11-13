@@ -58,7 +58,7 @@ class KjvmOpcodeClass(private val classLoader: KjvmClassLoader?, private val cla
     }
 
     override fun getName(): String {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        return className
     }
 
     fun getClassParser(): JavaClass {

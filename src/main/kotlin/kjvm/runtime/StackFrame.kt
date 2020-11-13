@@ -9,7 +9,7 @@ class StackFrame(
     private val kjvmClass: KjvmClass,
     private val kjvmMethod: KjvmMethod,
     private val constantPool: ConstantPool?,
-    private val opcodes: ArrayList<OpcodeInvoker>,
+    private val opcodes: ArrayList<OpcodeInvoker>?,
     variables: Int,
     stackSize: Int
 ) {
@@ -44,7 +44,7 @@ class StackFrame(
         return pc++
     }
 
-    fun getOpcodes(): ArrayList<OpcodeInvoker> {
+    fun getOpcodes(): ArrayList<OpcodeInvoker>? {
         return opcodes
     }
 

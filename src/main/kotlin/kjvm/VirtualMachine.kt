@@ -20,13 +20,13 @@ class VirtualMachine(private val rootPath: Path, private var classPackage: Strin
         kjvmMethod.call(env, null, arrayOf<Any>(args))
     }
 
-    private fun getClassFile(classPackage: String): KjvmClass {
+    fun getClassFile(classPackage: String): KjvmClass {
         val kjvmClass = methodArea[classPackage]
-        return if (kjvmClass == null){
+        return if (kjvmClass == null) {
             val loadClass = classLoader.loadClass(classPackage)
             methodArea[classPackage] = loadClass
             loadClass
-        }else{
+        } else {
             kjvmClass
         }
     }

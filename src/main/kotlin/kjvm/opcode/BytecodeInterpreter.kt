@@ -1,11 +1,12 @@
 package kjvm.opcode
+
 import kjvm.runtime.Env
 import kjvm.runtime.StackFrame
 import org.apache.bcel.Constants
 import java.util.*
 
 class BytecodeInterpreter {
-    companion object{
+    companion object {
         fun run(env: Env) {
             if (env.getStack().isRunning()) {
                 return
@@ -15,12 +16,12 @@ class BytecodeInterpreter {
             jvmStack.setRunning(true)
             var frame = jvmStack.currentFrame()
 
-            while (frame != null){
+            while (frame != null) {
                 if (frame.isReturned()) {
                     val oldFrame = frame
                     jvmStack.popFrame()
                     frame = jvmStack.currentFrame()
-                    if (frame != null && "void" != frame.getReturnType()){
+                    if (frame != null && "void" != frame.getReturnType()) {
                         frame.getOperandStack().push(oldFrame.getReturn())
                     }
                     continue
@@ -37,15 +38,16 @@ class BytecodeInterpreter {
                 sb.append("@")
                 sb.append(pc)
                 sb.append(":")
-                sb.append(opcodes[pc])
+                sb.append(opcodes?.get(pc))
                 println(sb)
 
-                opcodes[pc].invoke(env, frame)
+                opcodes?.get(pc)?.invoke(env, frame)
+                frame = jvmStack.currentFrame()
             }
-            
+
         }
 
-        fun parseCodes(codes: ByteArray): ArrayList<OpcodeInvoker>{
+        fun parseCodes(codes: ByteArray): ArrayList<OpcodeInvoker> {
             val opcodes = arrayListOf<OpcodeInvoker>()
             var i = 0
             while (i < codes.size) {
@@ -55,14 +57,13 @@ class BytecodeInterpreter {
                 val operands = codes.copyOfRange(i + 1, i + 1 + noOfOperands)
                 opcodes.add(object : OpcodeInvoker {
                     override fun invoke(env: Env, stackFrame: StackFrame) {
-                        fun invoke(env: Env?, frame: StackFrame?) {
-                            route.invoke(env, frame, operands)
-                        }
-
-                        fun toString(): String? {
-                            return route.name
-                        }
+                        route.invoke(env, stackFrame, operands)
                     }
+
+                    override fun toString(): String {
+                        return route.name
+                    }
+
                 })
                 i += noOfOperands.toInt()
                 i++
