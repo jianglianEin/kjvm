@@ -2,6 +2,7 @@ package kjvm
 
 import kjvm.lang.KjvmClass
 import kjvm.lang.KjvmClassLoader
+import kjvm.natives.KjvmNativeClass
 import kjvm.opcode.KjvmOpcodeClass
 import java.nio.file.Files
 import java.nio.file.Path
@@ -15,8 +16,7 @@ class KJvmClassLoader(private val classPath: Path) : KjvmClassLoader {
         return if (Files.exists(filePath)) {
             KjvmOpcodeClass.read(this, filePath)!!
         } else {
-    //            return KjvmNativeClass(this, Class.forName(classPackage.replace("/", ".")))
-            KjvmOpcodeClass.read(this, filePath)!!
+            KjvmNativeClass(this, Class.forName(classPackage.replace("/", ".")))
         }
     }
 }
