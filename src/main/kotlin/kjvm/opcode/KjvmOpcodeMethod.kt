@@ -16,7 +16,7 @@ class KjvmOpcodeMethod(private val opcodeClass: KjvmOpcodeClass, private val met
     private val opcodes = BytecodeInterpreter.parseCodes((method.attributes[0] as Code).code)
 
 
-    override fun call(env: Env, thiz: Any?, vararg args: Any?) {
+    override fun call(env: Env, thiz: Any?, args: Array<Any?>) {
         val frame = env.getStack().newFrame(
             opcodeClass,
             this,

@@ -75,7 +75,7 @@ class KjvmOpcodeClass(private val classLoader: KjvmClassLoader?, private val cla
             }
             isInited = true
 
-            methodsMap[AbstractMap.SimpleEntry("<clinit>", "()V")]?.call(env, null)
+            methodsMap[AbstractMap.SimpleEntry("<clinit>", "()V")]?.call(env, null, arrayOf())
         }
     }
 }

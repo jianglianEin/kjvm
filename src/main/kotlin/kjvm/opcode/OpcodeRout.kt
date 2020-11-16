@@ -48,7 +48,7 @@ enum class OpcodeRout(code: Short) {
     },
     RETURN(Constants.RETURN) {
         override fun invoke(env: Env, frame: StackFrame, operands: ByteArray) {
-            TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+            frame.setReturn(null, "void")
         }
 
         override fun getCode(): Short {

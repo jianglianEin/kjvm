@@ -17,7 +17,7 @@ class VirtualMachine(private val rootPath: Path, private var classPackage: Strin
             "([Ljava/lang/String;)V"
         )
 
-        kjvmMethod.call(env, null, arrayOf<Any>(args))
+        kjvmMethod.call(env, null, arrayOf(args))
     }
 
     fun getClassFile(classPackage: String): KjvmClass {

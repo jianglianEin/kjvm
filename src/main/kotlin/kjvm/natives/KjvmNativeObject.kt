@@ -10,7 +10,7 @@ class KjvmNativeObject(private val kjvmNativeClass: KjvmNativeClass) : KjvmObjec
 
     companion object {
         fun wrap(any: Any?, clazz: Class<*>, classLoader: KjvmClassLoader): Any? {
-            if (any == null){
+            if (any == null) {
                 return null
             }
             val primitiveTypes = arrayOf(
@@ -34,6 +34,21 @@ class KjvmNativeObject(private val kjvmNativeClass: KjvmNativeClass) : KjvmObjec
 
             return any
         }
+
+        fun multiUnwrap(anyList: Array<*>): Array<Any?> {
+            val res = arrayOfNulls<Any>(anyList.size)
+            for (i in anyList.indices) {
+                res[i] = unwrap(anyList[i]!!)
+            }
+            return res
+        }
+
+        fun unwrap(any: Any): Any? {
+            if (any is KjvmNativeObject){
+                return (any as KjvmNativeObject).getNativeObject()
+            }
+            return any
+        }
     }
 
     override fun getSuper(): KjvmObject {
@@ -46,5 +61,9 @@ class KjvmNativeObject(private val kjvmNativeClass: KjvmNativeClass) : KjvmObjec
 
     fun setNativeObject(any: Any) {
         this.any = any
+    }
+
+    fun getNativeObject(): Any? {
+        return any
     }
 }
