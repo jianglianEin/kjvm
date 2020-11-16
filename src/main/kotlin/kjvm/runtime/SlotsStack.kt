@@ -56,7 +56,6 @@ class SlotsStack<T>(size: Int) {
             localEnd--
             val entity = buffer[localEnd]
             if (entity != null) {
-                buffer[localEnd] = null
                 return entity
             }
         }

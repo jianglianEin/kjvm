@@ -44,7 +44,7 @@ class KjvmOpcodeMethod(private val opcodeClass: KjvmOpcodeClass, private val met
     }
 
     override fun getParameterCount(): Int {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        return parameterCount
     }
 
     override fun getName(): String {

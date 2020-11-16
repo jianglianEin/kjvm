@@ -12,10 +12,10 @@ class KjvmNativeMethod(private val nativeClass: KjvmNativeClass, private val met
     }
 
     override fun getParameterCount(): Int {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        return method.parameterCount
     }
 
     override fun getName(): String {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        return name
     }
 }

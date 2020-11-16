@@ -1,5 +1,6 @@
 package kjvm.natives
 
+import kjvm.lang.KjvmClass
 import kjvm.lang.KjvmClassLoader
 import kjvm.lang.KjvmObject
 import java.util.*
@@ -39,8 +40,8 @@ class KjvmNativeObject(private val kjvmNativeClass: KjvmNativeClass) : KjvmObjec
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 
-    override fun getClazz(): KjvmObject {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    override fun getClazz(): KjvmClass {
+        return kjvmNativeClass
     }
 
     fun setNativeObject(any: Any) {

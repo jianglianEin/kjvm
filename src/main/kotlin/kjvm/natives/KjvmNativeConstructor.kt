@@ -11,7 +11,7 @@ class KjvmNativeConstructor(private val nativeClass: KjvmNativeClass, private va
     }
 
     override fun getParameterCount(): Int {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        return constructor.parameterCount
     }
 
     override fun getName(): String {

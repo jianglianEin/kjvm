@@ -31,7 +31,8 @@ class KjvmNativeClass(private val classLoader: KjvmClassLoader, private val nati
     }
 
     override fun getMethod(name: String, description: String): KjvmMethod {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        return methods[SimpleEntry(name, description)]
+            ?: throw NoSuchMethodException("$name:$description not exist")
     }
 
     override fun hasMethod(name: String, description: String): Boolean {
@@ -51,6 +52,6 @@ class KjvmNativeClass(private val classLoader: KjvmClassLoader, private val nati
     }
 
     override fun getName(): String {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        return className
     }
 }
