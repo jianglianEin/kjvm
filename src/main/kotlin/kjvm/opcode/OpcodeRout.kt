@@ -46,6 +46,69 @@ enum class OpcodeRout(code: Short) {
             return Constants.ALOAD_3
         }
     },
+    ILOAD_0(Constants.ILOAD_0) {
+        override fun invoke(env: Env, frame: StackFrame, operands: ByteArray) {
+            val value = frame.getLocalVariables()[0]
+            frame.getOperandStack().push(value, 1)
+        }
+
+        override fun getCode(): Short {
+            return Constants.ILOAD_0
+        }
+
+    },
+    ILOAD_1(Constants.ILOAD_1) {
+        override fun invoke(env: Env, frame: StackFrame, operands: ByteArray) {
+            val value = frame.getLocalVariables()[1]
+            frame.getOperandStack().push(value, 1)
+        }
+
+        override fun getCode(): Short {
+            return Constants.ILOAD_1
+        }
+
+    },
+    ICONST_1(Constants.ICONST_1) {
+        override fun invoke(env: Env, frame: StackFrame, operands: ByteArray) {
+            frame.getOperandStack().push(1, 1)
+        }
+
+        override fun getCode(): Short {
+            return Constants.ICONST_1
+        }
+
+    },
+    ICONST_2(Constants.ICONST_2) {
+        override fun invoke(env: Env, frame: StackFrame, operands: ByteArray) {
+            frame.getOperandStack().push(2, 1)
+        }
+
+        override fun getCode(): Short {
+            return Constants.ICONST_2
+        }
+
+    },
+    BIPUSH(Constants.BIPUSH) {
+        override fun invoke(env: Env, frame: StackFrame, operands: ByteArray) {
+            frame.getOperandStack().push(operands[0], 1)
+        }
+
+        override fun getCode(): Short {
+            return Constants.BIPUSH
+        }
+
+    },
+    IADD(Constants.IADD) {
+        override fun invoke(env: Env, frame: StackFrame, operands: ByteArray) {
+            val result : Int = frame.getOperandStack().pop() as Byte + frame.getOperandStack().pop() as Int
+            frame.getOperandStack().push(result, 1)
+        }
+
+        override fun getCode(): Short {
+            return Constants.IADD
+        }
+
+    },
     RETURN(Constants.RETURN) {
         override fun invoke(env: Env, frame: StackFrame, operands: ByteArray) {
             frame.setReturn(null, "void")
@@ -53,6 +116,16 @@ enum class OpcodeRout(code: Short) {
 
         override fun getCode(): Short {
             return Constants.RETURN
+        }
+
+    },
+    IRETURN(Constants.IRETURN) {
+        override fun invoke(env: Env, frame: StackFrame, operands: ByteArray) {
+            frame.setReturn(frame.getOperandStack().pop(), "int")
+        }
+
+        override fun getCode(): Short {
+            return Constants.IRETURN
         }
 
     },
@@ -134,6 +207,35 @@ enum class OpcodeRout(code: Short) {
         override fun getCode(): Short {
             return Constants.INVOKEVIRTUAL
         }
+    },
+    INVOKESTATIC(Constants.INVOKESTATIC) {
+        override fun invoke(env: Env, frame: StackFrame, operands: ByteArray) {
+            val arg = operands[0].toInt() shl 8 or operands[1].toInt()
+
+            val info = frame.getConstantPool()?.constantPool?.get(arg) as ConstantMethodref
+            val constantPool = frame.getConstantPool()!!
+            val classIndex = constantPool.getConstant(info.classIndex) as ConstantClass
+            val nameAndType = constantPool.getConstant(info.nameAndTypeIndex) as ConstantNameAndType
+
+            val classPackage = classIndex.getConstantValue(constantPool) as String
+
+            val kjvmClass = env.getVirtualMachine().getClassFile(classPackage)
+            val kjvmMethod = kjvmClass.getMethod(
+                nameAndType.getName(constantPool)
+                , nameAndType.getSignature(constantPool)
+            )
+
+            val args = frame.getOperandStack().multiPop(kjvmMethod.getParameterCount())
+            args.reverse()
+            val argsArr = args.toArray()
+
+            kjvmMethod.call(env, null, Arrays.copyOfRange(argsArr, 0, argsArr.size))
+        }
+
+        override fun getCode(): Short {
+            return Constants.INVOKESTATIC
+        }
+
     };
 
 
