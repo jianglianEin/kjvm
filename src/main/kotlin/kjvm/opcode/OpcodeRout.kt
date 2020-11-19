@@ -68,6 +68,27 @@ enum class OpcodeRout(code: Short) {
         }
 
     },
+    ILOAD_2(Constants.ILOAD_2) {
+        override fun invoke(env: Env, frame: StackFrame, operands: ByteArray) {
+            val value = frame.getLocalVariables()[2]
+            frame.getOperandStack().push(value, 1)
+        }
+
+        override fun getCode(): Short {
+            return Constants.ILOAD_2
+        }
+
+    },
+    ICONST_0(Constants.ICONST_0) {
+        override fun invoke(env: Env, frame: StackFrame, operands: ByteArray) {
+            frame.getOperandStack().push(0, 1)
+        }
+
+        override fun getCode(): Short {
+            return Constants.ICONST_0
+        }
+
+    },
     ICONST_1(Constants.ICONST_1) {
         override fun invoke(env: Env, frame: StackFrame, operands: ByteArray) {
             frame.getOperandStack().push(1, 1)
@@ -88,6 +109,26 @@ enum class OpcodeRout(code: Short) {
         }
 
     },
+    ICONST_3(Constants.ICONST_3) {
+        override fun invoke(env: Env, frame: StackFrame, operands: ByteArray) {
+            frame.getOperandStack().push(3, 1)
+        }
+
+        override fun getCode(): Short {
+            return Constants.ICONST_3
+        }
+
+    },
+    ICONST_4(Constants.ICONST_4) {
+        override fun invoke(env: Env, frame: StackFrame, operands: ByteArray) {
+            frame.getOperandStack().push(4, 1)
+        }
+
+        override fun getCode(): Short {
+            return Constants.ICONST_4
+        }
+
+    },
     BIPUSH(Constants.BIPUSH) {
         override fun invoke(env: Env, frame: StackFrame, operands: ByteArray) {
             frame.getOperandStack().push(operands[0], 1)
@@ -98,14 +139,36 @@ enum class OpcodeRout(code: Short) {
         }
 
     },
+    ISTORE_1(Constants.ISTORE_1) {
+        override fun invoke(env: Env, frame: StackFrame, operands: ByteArray) {
+            val storeNum = frame.getOperandStack().pop() as Int
+            frame.getLocalVariables().set(1, storeNum, 1)
+        }
+
+        override fun getCode(): Short {
+            return Constants.ISTORE_1
+        }
+
+    },
     IADD(Constants.IADD) {
         override fun invoke(env: Env, frame: StackFrame, operands: ByteArray) {
-            val result : Int = frame.getOperandStack().pop() as Byte + frame.getOperandStack().pop() as Int
+            val result: Int = Integer.parseInt(frame.getOperandStack().pop().toString())
+            +Integer.parseInt(frame.getOperandStack().pop().toString())
             frame.getOperandStack().push(result, 1)
         }
 
         override fun getCode(): Short {
             return Constants.IADD
+        }
+
+    },
+    ISUB(Constants.ISUB) {
+        override fun invoke(env: Env, frame: StackFrame, operands: ByteArray) {
+            TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        }
+
+        override fun getCode(): Short {
+            return Constants.ISUB
         }
 
     },
@@ -198,6 +261,26 @@ enum class OpcodeRout(code: Short) {
         override fun getCode(): Short {
             return Constants.LDC
         }
+    },
+    IF_ICMPNE(Constants.IF_ICMPNE) {
+        override fun invoke(env: Env, frame: StackFrame, operands: ByteArray) {
+            TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        }
+
+        override fun getCode(): Short {
+            return Constants.IF_ICMPNE
+        }
+
+    },
+    IFNE(Constants.IFNE) {
+        override fun invoke(env: Env, frame: StackFrame, operands: ByteArray) {
+            TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        }
+
+        override fun getCode(): Short {
+            return Constants.IFNE
+        }
+
     },
     INVOKEVIRTUAL(Constants.INVOKEVIRTUAL) {
         override fun invoke(env: Env, frame: StackFrame, operands: ByteArray) {
