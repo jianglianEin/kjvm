@@ -6,6 +6,7 @@ import kjvm.runtime.StackFrame
 import org.apache.bcel.Constants
 import org.apache.bcel.classfile.*
 import java.util.*
+import kotlin.collections.ArrayList
 
 enum class OpcodeRout(code: Short) {
     ALOAD_0(Constants.ALOAD_0) {
@@ -152,9 +153,14 @@ enum class OpcodeRout(code: Short) {
     },
     IADD(Constants.IADD) {
         override fun invoke(env: Env, frame: StackFrame, operands: ByteArray) {
-            val result: Int = Integer.parseInt(frame.getOperandStack().pop().toString())
-            +Integer.parseInt(frame.getOperandStack().pop().toString())
-            frame.getOperandStack().push(result, 1)
+            val args: ArrayList<Any> = frame.getOperandStack().multiPop(2)
+            if (args[0] is Int && args[1] is Int) {
+                val result: Int = args[0] as Int + args[1] as Int
+                frame.getOperandStack().push(result, 1)
+            } else {
+                throw InternalError("Args type should be Int")
+            }
+
         }
 
         override fun getCode(): Short {
@@ -164,7 +170,15 @@ enum class OpcodeRout(code: Short) {
     },
     ISUB(Constants.ISUB) {
         override fun invoke(env: Env, frame: StackFrame, operands: ByteArray) {
-            TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+            val args: ArrayList<Any> = frame.getOperandStack().multiPop(2)
+            args.reverse()
+            if (args[0] is Int && args[1] is Int) {
+                val result: Int = args[0] as Int - args[1] as Int
+                frame.getOperandStack().push(result, 1)
+            } else {
+                throw InternalError("Args type should be Int")
+            }
+
         }
 
         override fun getCode(): Short {
@@ -264,7 +278,13 @@ enum class OpcodeRout(code: Short) {
     },
     IF_ICMPNE(Constants.IF_ICMPNE) {
         override fun invoke(env: Env, frame: StackFrame, operands: ByteArray) {
-            TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+            val value1 = frame.getOperandStack().pop()
+            val value2 = frame.getOperandStack().pop()
+            if (value1 != value2) {
+                val arg = operands[0].toInt() shl 8 or operands[1].toInt()
+                val offset = arg - operands.size
+                frame.setPC(frame.getPC() + offset - 1)
+            }
         }
 
         override fun getCode(): Short {
@@ -274,7 +294,12 @@ enum class OpcodeRout(code: Short) {
     },
     IFNE(Constants.IFNE) {
         override fun invoke(env: Env, frame: StackFrame, operands: ByteArray) {
-            TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+            val value = frame.getOperandStack().pop()
+            if (value != 0) {
+                val arg = operands[0].toInt() shl 8 or operands[1].toInt()
+                val offset = arg - operands.size
+                frame.setPC(frame.getPC() + offset - 1)
+            }
         }
 
         override fun getCode(): Short {
