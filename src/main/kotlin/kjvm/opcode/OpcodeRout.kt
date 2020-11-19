@@ -80,6 +80,17 @@ enum class OpcodeRout(code: Short) {
         }
 
     },
+    ILOAD_3(Constants.ILOAD_3) {
+        override fun invoke(env: Env, frame: StackFrame, operands: ByteArray) {
+            val value = frame.getLocalVariables()[3]
+            frame.getOperandStack().push(value, 1)
+        }
+
+        override fun getCode(): Short {
+            return Constants.ILOAD_3
+        }
+
+    },
     ICONST_0(Constants.ICONST_0) {
         override fun invoke(env: Env, frame: StackFrame, operands: ByteArray) {
             frame.getOperandStack().push(0, 1)
@@ -148,6 +159,26 @@ enum class OpcodeRout(code: Short) {
 
         override fun getCode(): Short {
             return Constants.ISTORE_1
+        }
+
+    },
+    ISTORE_2(Constants.ISTORE_2) {
+        override fun invoke(env: Env, frame: StackFrame, operands: ByteArray) {
+            TODO("implement like ISTORE_1")
+        }
+
+        override fun getCode(): Short {
+            return Constants.ISTORE_2
+        }
+
+    },
+    ISTORE_3(Constants.ISTORE_3) {
+        override fun invoke(env: Env, frame: StackFrame, operands: ByteArray) {
+            TODO("implement like ISTORE_1")
+        }
+
+        override fun getCode(): Short {
+            return Constants.ISTORE_3
         }
 
     },
