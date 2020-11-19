@@ -141,6 +141,16 @@ enum class OpcodeRout(code: Short) {
         }
 
     },
+    ICONST_5(Constants.ICONST_5) {
+        override fun invoke(env: Env, frame: StackFrame, operands: ByteArray) {
+            frame.getOperandStack().push(5, 1)
+        }
+
+        override fun getCode(): Short {
+            return Constants.ICONST_5
+        }
+
+    },
     BIPUSH(Constants.BIPUSH) {
         override fun invoke(env: Env, frame: StackFrame, operands: ByteArray) {
             frame.getOperandStack().push(operands[0], 1)
@@ -148,6 +158,16 @@ enum class OpcodeRout(code: Short) {
 
         override fun getCode(): Short {
             return Constants.BIPUSH
+        }
+
+    },
+    ISTORE(Constants.ISTORE) {
+        override fun invoke(env: Env, frame: StackFrame, operands: ByteArray) {
+            TODO("implement like ISTORE_1")
+        }
+
+        override fun getCode(): Short {
+            return Constants.ISTORE
         }
 
     },
@@ -179,6 +199,66 @@ enum class OpcodeRout(code: Short) {
 
         override fun getCode(): Short {
             return Constants.ISTORE_3
+        }
+
+    },
+    ASTORE_1(Constants.ASTORE_1) {
+        override fun invoke(env: Env, frame: StackFrame, operands: ByteArray) {
+            TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        }
+
+        override fun getCode(): Short {
+            return Constants.ASTORE_1
+        }
+
+    },
+    ASTORE_2(Constants.ASTORE_2) {
+        override fun invoke(env: Env, frame: StackFrame, operands: ByteArray) {
+            TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        }
+
+        override fun getCode(): Short {
+            return Constants.ASTORE_2
+        }
+
+    },
+    IASTORE(Constants.IASTORE) {
+        override fun invoke(env: Env, frame: StackFrame, operands: ByteArray) {
+            TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        }
+
+        override fun getCode(): Short {
+            return Constants.IASTORE
+        }
+
+    },
+    ILOAD(Constants.ILOAD) {
+        override fun invoke(env: Env, frame: StackFrame, operands: ByteArray) {
+            TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        }
+
+        override fun getCode(): Short {
+            return Constants.ILOAD
+        }
+
+    },
+    IALOAD(Constants.IALOAD) {
+        override fun invoke(env: Env, frame: StackFrame, operands: ByteArray) {
+            TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        }
+
+        override fun getCode(): Short {
+            return Constants.IALOAD
+        }
+
+    },
+    DUP(Constants.DUP) {
+        override fun invoke(env: Env, frame: StackFrame, operands: ByteArray) {
+            TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        }
+
+        override fun getCode(): Short {
+            return Constants.DUP
         }
 
     },
@@ -214,6 +294,36 @@ enum class OpcodeRout(code: Short) {
 
         override fun getCode(): Short {
             return Constants.ISUB
+        }
+
+    },
+    IINC(Constants.IINC) {
+        override fun invoke(env: Env, frame: StackFrame, operands: ByteArray) {
+            TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        }
+
+        override fun getCode(): Short {
+            return Constants.IINC
+        }
+
+    },
+    NEWARRAY(Constants.NEWARRAY) {
+        override fun invoke(env: Env, frame: StackFrame, operands: ByteArray) {
+            TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        }
+
+        override fun getCode(): Short {
+            return Constants.NEWARRAY
+        }
+
+    },
+    ARRAYLENGTH(Constants.ARRAYLENGTH) {
+        override fun invoke(env: Env, frame: StackFrame, operands: ByteArray) {
+            TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        }
+
+        override fun getCode(): Short {
+            return Constants.ARRAYLENGTH
         }
 
     },
@@ -323,6 +433,16 @@ enum class OpcodeRout(code: Short) {
         }
 
     },
+    IF_ICMPGE(Constants.IF_ICMPGE) {
+        override fun invoke(env: Env, frame: StackFrame, operands: ByteArray) {
+            TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        }
+
+        override fun getCode(): Short {
+            return Constants.IF_ICMPGE
+        }
+
+    },
     IFNE(Constants.IFNE) {
         override fun invoke(env: Env, frame: StackFrame, operands: ByteArray) {
             val value = frame.getOperandStack().pop()
@@ -335,6 +455,16 @@ enum class OpcodeRout(code: Short) {
 
         override fun getCode(): Short {
             return Constants.IFNE
+        }
+
+    },
+    GOTO(Constants.GOTO) {
+        override fun invoke(env: Env, frame: StackFrame, operands: ByteArray) {
+            TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        }
+
+        override fun getCode(): Short {
+            return Constants.GOTO
         }
 
     },
